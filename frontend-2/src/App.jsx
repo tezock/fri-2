@@ -158,7 +158,7 @@ function App() {
 
      (
      <>
-      <h1>Welcome to <span>Dobby Personalities!</span></h1>
+      <h1>Say Hi to <span>Dobby!</span></h1>
       <p>A project by Robert Tezock, Nicolas Osgnach, Aditya Ramaswamy, and Shankarsh Narayanan</p>
 
       <button onClick={handleStartConversation}>Click here if you're ready to chat with Dobby!</button>
