@@ -4,12 +4,43 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator} from '@chatscope/chat-ui-kit-react'
-
+import personalities from './personalities.jsx';
+import InteractionSurveyForm from './Form';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_API_KEY; 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+async function saveFormToSupabase(form) {
+  try {
+    const { data, error } = await supabase
+      .from('responses') // Your Supabase table name
+      .insert([
+        { 
+          age: form.age,
+          major: form.major,
+          engagementLevel: form.engagementLevel,
+          conversationLeader: form.conversationLeader,
+          responseAccuracy: form.responseAccuracy,
+          responseReadPercentage: form.responseReadPercentage,
+          likelihoodToInteract: form.likelihoodToInteract,
+          interactionQuality: form.interactionQuality,
+          promptId: form.promptId,
+          created_at: new Date()
+        }
+      ]);
+
+    if (error) {
+      console.error('Error saving conversation to Supabase:', error);
+    } else {
+      console.log('Conversation saved successfully:', data);
+    }
+  } catch (error) {
+    console.error('Error during Supabase insertion:', error);
+  }
+}
+
 
 async function saveConversationToSupabase(conversation, prompt_id) {
   try {
@@ -54,7 +85,7 @@ function App() {
 
   const handleRandomizeId = () => {
 
-    setId(Math.floor(Math.random() * 4));
+    setId(Math.floor(Math.random() * 10));
   }
 
   const handleStartConversation = () => {
@@ -108,7 +139,7 @@ function App() {
 
     const systemMessage = {
       role: "system",
-      content: "You are a helpful assistant."
+      content: personalities[id]
     }
 
     const apiRequestBody = {
@@ -196,11 +227,11 @@ function App() {
 
       <h1>Thank you!</h1>
 
-      <h3>Please fill out feedback of your interaction here below, or to go back to the beginning!</h3>
+      <h3>Please fill out feedback of your interaction here below, and talk to Dobby again!</h3>
 
-      <button onClick={handleReset}>Back to Beginning</button>
+      <InteractionSurveyForm onSave={saveFormToSupabase} />
       <br />
-      <button onClick={()=>window.open("https://www.example.com")}>Form Here</button>
+      <button onClick={handleReset}>Back to Beginning</button>
       </>
     )}
     </>
