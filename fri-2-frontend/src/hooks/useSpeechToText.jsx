@@ -9,7 +9,6 @@ const useSpeechToText = (options) => {
 
     useEffect(() => {
         console.log("state");
-        console.log(chatMessages)
     }, [chatMessages])
 
     useEffect(() => {
@@ -56,7 +55,6 @@ const useSpeechToText = (options) => {
 
             // console.log("gpt responded");
             console.log("trying state");
-            console.log(chatMessages);
             
         }
 
