@@ -185,7 +185,7 @@ function App() {
      (
      <>
       <h1>Say Hi to <span>Dobby!</span></h1>
-      <p>This chatbot is in use for a research project, consent is implied by continuing.</p>
+      <p>This chatbot is in use for a class project, and consent is implied by continuing.</p>
       <p>We capture anonymized data regarding chatlogs and the experience, including nothing tracing back to users.</p>
 
       <button onClick={handleStartConversation}>Click here if you're ready to chat with Dobby!</button>
@@ -225,7 +225,7 @@ function App() {
 
       <h3>Please fill out feedback of your interaction here below, and talk to Dobby again!</h3>
 
-      <InteractionSurveyForm onSave={saveFormToSupabase} />
+      <InteractionSurveyForm onSave={saveFormToSupabase} pid={id}/>
       <br />
       <button onClick={handleReset}>Back to Beginning</button>
       </>

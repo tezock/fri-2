@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 // const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -40,7 +40,30 @@ const form_fields = {
     irresponsibleToResponsible: null,
     unintelligentToIntelligent: null,
     foolishToSensible: null,
+    promptId: null,
   };
+
+  const beforeAndAfter = {
+    fakeToNatural: ["Fake", "Natural"],
+    machinelikeToHumanlike: ["Machinelike", "Humanlike"], 
+    unconsciousToConscious: ["Unconscious", "Conscious"],
+    artificialToLifelike: ["Artificial", "Lifelike"],
+    stagnantToAnimacy: ["Stagnant", "Animate"],
+    mechanicalToLively: ["Mechanical", "Lively"],
+    artificialToOrganic: ["Artificial", "Organic"],
+    inertToInteractive: ["Inert", "Interactive"],
+    apatheticToResponsive: ["Apathetic", "Responsive"],
+    dislikeToLikeability: ["Dislikeable", "Likeable"],
+    unfriendlyToFriendly: ["Unfriendly", "Friendly"],
+    unkindToKind: ["Unkind", "Kind"],
+    unpleasantToPleasant: ["Unpleasant", "Pleasant"],
+    awfulToNice: ["Awful", "Nice"],
+    incompetentToCompetent: ["Incompetent", "Competent"],
+    ignorantToKnowledgeable: ["Ignorant", "Knowledgeable"],
+    irresponsibleToResponsible: ["Irresponsible", "Responsible"],
+    unintelligentToIntelligent: ["Unintelligent", "Intelligent"],
+    foolishToSensible: ["Foolish", "Sensible"]
+   }
   
 // const InteractionSurveyForm = ({onSave}) => {
 //     const [formDone, setFormDone] = useState(false);
@@ -201,7 +224,7 @@ const form_fields = {
 //     );
 // };
 
-const InteractionSurveyForm = ({ onSave }) => {
+const InteractionSurveyForm = ({ onSave, pid }) => {
     const [formDone, setFormDone] = useState(false);
     const [formData, setFormData] = useState(formFields);
   
@@ -210,6 +233,12 @@ const InteractionSurveyForm = ({ onSave }) => {
       console.log("new form data");
       console.log(formData);
     };
+
+    useEffect(() => {
+      if (pid) {
+        setFormData(prev => ({...prev, promptId: pid}));
+      }
+    }, [pid]);
   
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -251,24 +280,26 @@ const InteractionSurveyForm = ({ onSave }) => {
         
         <h3> Now, please rate the chatbot on the following categories:</h3>
         {Object.entries(formData).map(([key, value]) => {
-          if (key === "age" || key === "major") return null;
+          if (key === "age" || key === "major" || key === "promptId") return null;
   
           return (
             <div key={key}>
-              <label>
+              {/* <label>
                 {key
                   .replace(/([A-Z])/g, " $1")
                   .replace(/^./, (str) => str.toUpperCase())}
                 :
-              </label>
-              <div style={{ display: "flex", gap: "10px", marginBottom: "2vh", justifyContent: "space-around"}}>
-                {[1, 2, 3, 4, 5].map((option) => (
+              </label> */}
+              <div style={{ display: "flex", gap: "10px", marginBottom: "2vh", justifyContent: "space-around", alignItems: "center"}}>
+
+                <label style={{ width: "80px" }}>{beforeAndAfter[key][0]}</label>
+                {[1, 2, 3, 4, 5, 6, 7].map((option) => (
                   <button
                     type="button"
                     key={option}
                     onClick={() => handleChange(key, option)}
                     style={{
-                      padding: "5px 10px",
+                      padding: "3px 8px",
                       backgroundColor: value === option ? "#4caf50" : "#f0f0f0",
                       color: value === option ? "#fff" : "#000",
                       border: "1px solid #ccc",
@@ -279,6 +310,7 @@ const InteractionSurveyForm = ({ onSave }) => {
                     {option}
                   </button>
                 ))}
+                <label style={{ width: "80px" }}>{beforeAndAfter[key][1]}</label>
               </div>
             </div>
           );
